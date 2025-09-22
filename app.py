@@ -19,6 +19,15 @@ def about():
 @app.route('/contacts')
 def contacts():
 	return render_template('contacts.html',title='Contacts')
+@app.route('/guides')
+def guides():
+	return render_template('guides.html',title='Guides')
+@app.route('/guides/irc')
+def irc():
+	return render_template('guides/irc.html',title='IRC Guide')
+@app.route('/guides/connect')
+def connect():
+	return render_template('guides/connect.html',title="Conenct Guide")
 @app.errorhandler(404)
 def page_not_found(e):
 	return render_template('404.html',title="Not found"),404

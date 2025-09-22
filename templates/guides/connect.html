@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>guide://connect</h1>
+<div class="window">
+  <div class="window-top-bar">notepad.exe: connect.txt<span class="fake-close">X</span></div>
+  <div class="window-content">
+    <h2>Подключение к сети</h2>
+    Для того, чтобы подключиться к сети, нужно скачать ПО Wireguard: <a href="https://www.wireguard.com/install/">Ссылка</a><br>
+    Далее, нужно получить файл <span style="color:crimson">.conf</span> - через телеграмм бота или от <span style="color:cornflowerblue">@exception17</span>, если бот не работает.<br>
+    В wireguard-е импортируем наш файл конфигурации - и подключаемся к сети.
+  </div>
+</div>
+<a href="/" class="link-button">>Домой</a>
+{% endblock %}

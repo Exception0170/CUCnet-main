@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>guide://IRC</h1>
+<div class="window">
+  <div class="window-top-bar">notepad.exe: irc.txt<span class="fake-close">X</span></div>
+  <div class="window-content">
+    <h2>Подключение к IRC</h2>
+    Приветствую, если решили попробовать подключиться к IRC!<br>
+    <a href="https://ru.wikipedia.org/wiki/IRC">Вики о IRC</a><br>
+    Сервер доступен на: <span style="color:lightblue">server.cucnet:6667</span> (только с кукнета) или <span style="color:lightblue">cucnet.ddns.net:6667</span> (Интернет)<br> 
+    Для подключения нужен специальный IRC-клиент(ну, или telnet если вы мазохист).<br>
+    <h3>Некоторые клиенты для популярных ОС:</h3>
+    <div class="list-entries">
+      <div>MacOS: <a href="https://irssi.org/">irssi (terminal)</a>, <a href="https://www.codeux.com/textual/">Textual (gui)</a></div>
+      <div>Lunix: <a href="https://irssi.org/">irssi (terminal)</a>, <a href="https://hexchat.github.io/downloads.html">Hexchat (gui)</a></div>
+      <div>Windows: <a href="https://hexchat.github.io/downloads.html">Hexchat (gui)</a>, <a href="https://www.mirc.com/get.html">mIRC (gui)</a></div>
+    </div>
+    С помощью уже этих клиентов можно подключиться к IRC.
+    <h3>Наша IRC</h3>
+    У нас стоит небольшой бот - он можен отправить вам в лс последние 50 сообщений - полезно, если ты уходил, ведь IRC не сохраняет историю, когда вы не подключены.
+  </div>
+</div>
+<a href="/" class="link-button">>Домой</a>
+{% endblock %}
