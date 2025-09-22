@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.active {
+	color: lime;
+	font-weight: bold;
+}
+.failed, .error, .not-found, .timeout {
+	color: red;
+	font-weight: bold;
+}
+</style>
+<h1>sys://CUCnet/status</h1>
+<div class="window" style="width: 80%">
+	<div class="window-top-bar">status.exe<span class="fake-close">X</span></div>
+	<div class="window-content">
+		<h2 style="font-family:'TDAtext'">Статус сервисов кукнета:</h2>
+		{{ active }} из {{total}} сервисов работает
+		{% for service in services %}
+		<div class="list-entries">
+			{{ service.name }}: 
+			<span class="{{ service.state|lower }}">{{service.state}}</span>
+			Uptime: {{ service.uptime }}
+		</div>
+		{% endfor %}
+		<a href="/" class="link-button">> Домой</a>
+	</div>
+</div>
+{% endblock %}

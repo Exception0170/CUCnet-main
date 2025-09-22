@@ -1,0 +1,232 @@
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'TDAtext';
+  src: url('../fonts/TDAtext.ttf') format('truetype');
+}
+
+body {
+  background-color: #331900;
+  color: #ff9c25;
+  font-family: 'TDAtext', monospace;
+  padding: 10px;
+  font-size: 20px;
+  line-height: 1.1;
+  position: relative;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+/* Global lined appearance for retro CRT effect */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    transparent 0%,
+    transparent 2px,
+    rgba(255, 156, 37, 0.1) 2px,
+    rgba(255, 156, 37, 0.1) 4px
+  );
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 10;
+}
+
+.a{
+  color: #6488EA;
+  text-decoration: none;
+}
+
+.window {
+  background-color: rgba(51, 25, 0, 0.6);
+  color: #ff9c25;
+  border: 2px solid #ff9c25;
+  margin: 20px auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.window-top-bar {
+  background-color: #ff9c25;
+  color: #331900;
+  padding: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.window-top-bar .fake-close {
+  font-size: 1.2em;
+  cursor: default;
+  padding: 0 5px;
+}
+
+.window-content {
+  padding: 10px;
+}
+
+.link-button {
+  display: inline-block;
+  background-color: #ff9c25;
+  color: #331900;
+  text-decoration: none;
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 2px solid #ff9c25;
+  box-sizing: border-box;
+  margin: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.link-button:hover {
+  background-color: #331900;
+  color: #ff9c25;
+}
+
+.blue-button {
+  display: inline-block;
+  background-color: #6488EA;
+  color: #331900;
+  text-decoration: none;
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 2px solid #6488EA;
+  box-sizing: border-box;
+  margin: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.blue-button:hover {
+  background-color: #331900;
+  color: #6488EA;
+}
+
+.note {
+  background-color: #6488EA;
+  color: #331900;
+  border: 1px solid #6488EA;
+  padding: 1px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  font-size: 1em;
+  border-radius: 0;
+  .note h3 {
+    margin:0 !important;
+    padding:0 !important;
+  }
+}
+
+.warning {
+  background-color: #D0342C;
+  color: #331900;
+  border: 2px solid #D0342C;
+  padding: 1px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  font-size: 1em;
+  border-radius: 0;
+  font-weight: bold;
+  display: inline-block;
+}
+
+
+.list-entries {
+  background-color: rgba(51, 25, 0, 0);
+  border: 2px solid #ff9c25;  
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  line-height: 1;
+  font-size: 1em;
+  border-radius: 0;
+}
+
+.list-entries ul, .list-entries ol {
+  margin: 0;
+  padding-left: 20px; 
+  list-style-type: disc;
+}
+
+.list-entries li {
+  margin-bottom: 0;
+  border: 2px solid #ff9c25;
+}
+.list-entries div{
+    margin-bottom: 0;
+    padding: 5px;
+    font-size: 1em;
+    border: 2px solid #ff9c25;
+}
+
+.typed-cursor {
+  opacity: 1;
+  animation: blink 1s infinite;
+}
+
+.special-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #331900;
+  color: #4e300b;
+  font-family: 'VT323', monospace;
+  font-size: 0.8em;
+  white-space: pre;
+  overflow: auto;
+  z-index: -2;
+  opacity: 0.5;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.animated-nickname {
+  background-image: linear-gradient(to right, #FF0000, #ff8000);  /* Red to orange gradient */
+  -webkit-background-clip: text;  /* For WebKit browsers like Chrome */
+  background-clip: text;
+  color: transparent;  /* Makes the text transparent to show the gradient */
+  font-family: 'VT323', monospace;  /* Matches your retro theme */
+  display: inline-block;  /* Ensures it behaves like inline text */
+  animation: gradientAnimation 5s linear infinite;  /* Animates the gradient; adjust duration as needed */
+  white-space: nowrap;  /* Prevents wrapping for a clean effect */
+  font-size: 1.5em;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;  /* Start position */
+  }
+  50% {
+    background-position: 100% 50%;  /* Move the gradient */
+  }
+  100% {
+    background-position: 0% 50%;  /* Loop back */
+  }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+h1 {
+  font-family: 'VT323', monospace;
+  margin-bottom: 1em;
+}
+.contact-name{
+  font-size: 1.2em;
+  color: yellow;
+}
