@@ -1,11 +1,28 @@
 from flask import Flask,render_template
 from getservice import check_multiple_services 
-
+import json
+from datetime import datetime
 app=Flask(__name__)
 
+def load_news():
+	try:
+		with open('news.json', 'r', encoding='utf-8') as f:
+			news_list = json.load(f)
+			# Sort by timestamp (newest first)
+			news_list.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+			return news_list
+	except FileNotFoundError:
+		return []
+	
 @app.route('/')
 def index():
-	return render_template('index.html',title='main')
+	news_list = load_news()[:7]
+	return render_template('index.html',title='main', news_list=news_list)
+
+@app.route('/news')
+def news_page():
+    news_list = load_news()  # Get all news
+    return render_template('news.html', news_list=news_list)
 
 @app.route('/status')
 def status():

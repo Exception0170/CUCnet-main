@@ -1,2 +1,4 @@
 flask
 psutil
+python-telegram-bot
+dotenv
