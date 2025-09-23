@@ -19,11 +19,6 @@ def index():
 	news_list = load_news()[:7]
 	return render_template('index.html',title='main', news_list=news_list)
 
-@app.route('/news')
-def news_page():
-    news_list = load_news()  # Get all news
-    return render_template('news.html', news_list=news_list)
-
 @app.route('/status')
 def status():
 	services_status=check_multiple_services([['ngircd','IRC'],['wg-quick@wg0','Network']],[['python3 bot.py','Telegram Bot']])
