@@ -1,5 +1,3 @@
-{% extends "index.html" %}
-{% block news %}
 <div class="window" style="width: 80%; border-color: #6488EA;">
   <div class="window-top-bar" style="background-color: #6488EA;">news.txt<span class="fake-close">X</span></div>
   <div class="window-content" style="color: #6488EA;">
@@ -7,17 +5,11 @@
     <div class="news-container">
       {% if news_list %}
         {% for news in news_list %}
-        <div class="news-item">
-          <div class="news-date">📅 {{ news.date }}</div>
-          <div class="news-text">{{ news.text }}</div>
-        </div>
+        [{{ news.date }}]: {{ news.text }}<br>
         {% endfor %}
       {% else %}
-        <div class="no-news">
-          No news available at the moment. Check back later!
-        </div>
+        Пока нет новостей! Кайфуем!
       {% endif %}
     </div>
   </div>
 </div>
-{% endblock %}

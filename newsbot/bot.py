@@ -52,21 +52,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     
     await update.message.reply_text(
-        "Welcome to News Bot!\n"
-        "Commands:\n"
-        "/news - Add news (reply to this command with your news)\n"
-        "/list - Show all news\n"
-        "/delete <id> - Delete news by ID"
+        "Бот новостей CUCnet-а!\n"
+        "Команды:\n"
+        "/news - Добавить новость(Нужно ответить!)\n"
+        "/list - Список новостей(да ладно0\n"
+        "/delete <id> - Удалить новость по айдишнику(из канала тоже удалит дада)"
     )
 
 async def news_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_authorized(update.effective_chat.id):
-        await update.message.reply_text("Unauthorized access.")
+        await update.message.reply_text("Неавторизованный доступ!!! 403!!!.")
         return
     
     # Store that we're waiting for news input
     context.user_data['waiting_for_news'] = True
-    await update.message.reply_text("Please send your news message:")
+    await update.message.reply_text("Ответь сообещнием с новостью(Именно ответь):")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_authorized(update.effective_chat.id):
@@ -94,44 +94,44 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             bot = Bot(token=BOT_TOKEN)
             message = await bot.send_message(
                 chat_id=NEWS_CHANNEL_ID,
-                text=f"📰 {news_text}\n\nDate: {news_entry['date']}"
+                text=f"[{news_entry['date']}]: {news_text}"
             )
             # Save the channel message ID for future deletion
             save_message_id(news_id, message.message_id)
             
         except Exception as e:
-            logging.error(f"Error posting to channel: {e}")
+            logging.error(f"Ошибка постинга в канал: {e}")
         
         context.user_data['waiting_for_news'] = False
-        await update.message.reply_text(f"News added successfully! ID: {news_id}")
+        await update.message.reply_text(f"Новость успешно добавлена! ID: {news_id}")
 
 async def list_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_authorized(update.effective_chat.id):
-        await update.message.reply_text("Unauthorized access.")
+        await update.message.reply_text("Неавторизованный доступ!! 403!!! get dunked on!")
         return
     
     news_list = load_news()
     
     if not news_list:
-        await update.message.reply_text("No news available.")
+        await update.message.reply_text("Новостей нету.")
         return
     
     response = "📰 News List:\n\n"
     for news in news_list[-10:]:  # Show last 10 news
         response += f"ID: {news['id']}\n"
-        response += f"Date: {news['date']}\n"
-        response += f"Text: {news['text'][:100]}...\n"
+        response += f"Дата: {news['date']}\n"
+        response += f"{news['text'][:100]}...\n"
         response += "─" * 30 + "\n"
     
     await update.message.reply_text(response)
 
 async def delete_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_authorized(update.effective_chat.id):
-        await update.message.reply_text("Unauthorized access.")
+        await update.message.reply_text("Неавторизованный доступ!!! 403!!.")
         return
     
     if not context.args:
-        await update.message.reply_text("Usage: /delete <news_id>")
+        await update.message.reply_text("Использование: /delete <news_id>")
         return
     
     try:
@@ -146,7 +146,7 @@ async def delete_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 break
         
         if not news_to_delete:
-            await update.message.reply_text(f"News with ID {news_id} not found.")
+            await update.message.reply_text(f"Новость с ID {news_id} не найдена. 404!")
             return
         
         # Delete from channel if message ID exists
@@ -158,8 +158,8 @@ async def delete_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     message_id=news_to_delete['channel_message_id']
                 )
             except Exception as e:
-                logging.error(f"Error deleting message from channel: {e}")
-                await update.message.reply_text(f"News deleted but channel deletion failed: {e}")
+                logging.error(f"Ошибка удаление новочтей с канала: {e}")
+                await update.message.reply_text(f"Новость удалена но не с канала: {e}")
         
         # Remove from news list
         news_list = [news for news in news_list if news['id'] != news_id]
@@ -169,10 +169,10 @@ async def delete_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
             news['id'] = i
         
         save_news(news_list)
-        await update.message.reply_text(f"News with ID {news_id} deleted successfully.")
+        await update.message.reply_text(f"Новость с ID {news_id} успешно удалена.")
         
     except ValueError:
-        await update.message.reply_text("Please provide a valid numeric ID.")
+        await update.message.reply_text("Дай мне валидный ID(int).")
 
 def main():
     # Validate environment variables
