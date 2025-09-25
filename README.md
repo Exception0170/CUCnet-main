@@ -1,1 +1,1 @@
-# CUCnet website
+# CUCnet main syster repository
