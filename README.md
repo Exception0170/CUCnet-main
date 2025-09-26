@@ -1,1 +1,1 @@
-# CUCnet main syster repository
+# CUCnet main system repository
