@@ -108,18 +108,31 @@ async def connect(request: Request):
 
 
 # Error handlers
+@app.exception_handler(500)
+async def internal_server_error_handler(request: Request, exc: Exception):
+    """Handle 500 errors with a custom page"""
+    return templates.TemplateResponse(
+        "error.html",
+        {
+            "error": ">  500 Internal Server Error",
+            "request": request,
+            "message": str(exc)
+        },
+        status_code=500
+    )
+
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "message": ">  404 not found;"}, status_code=404)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "error": ">  404 not found;"}, status_code=404)
     elif exc.status_code == 401:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Unauthorized", "message": ">  401 Unauthorized"}, status_code=401)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Unauthorized", "error": ">  401 Unauthorized"}, status_code=401)
     elif exc.status_code == 403:
         # Flask returned 200 here, but 403 is normal; I keep 403 status here:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "message": ">  403 Forbidden;"}, status_code=403)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "error": ">  403 Forbidden;"}, status_code=403)
     elif exc.status_code == 500:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "message": ">  500 Internal server error;"}, status_code=500)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "error": ">  500 Internal server error;"}, status_code=500)
     else:
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
