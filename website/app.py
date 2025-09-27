@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, status, HTTPException
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +12,11 @@ from website.getservice import check_multiple_services
 import json
 import os
 
-app = FastAPI()
+app = FastAPI(
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None
+)
 
 app.mount("/static", StaticFiles(directory="website/static", html=True), name="static")
 
@@ -34,16 +38,18 @@ class SecurityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # Block CONNECT method
         if request.method == 'CONNECT':
-            return PlainTextResponse("Method Not Allowed", status_code=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "title": "error", "error": ">  405 Method not allowed"},
+                status_code=405)
 
         # Block suspicious paths
         suspicious_paths = ['.git', '.env', 'wp-', 'admin', 'http://', 'https://']
         if any(suspicious in request.url.path for suspicious in suspicious_paths):
-            return PlainTextResponse("Not Found", status_code=status.HTTP_404_NOT_FOUND)
-
-        # Block non-standard HTTP methods
-        if request.method not in ['GET', 'HEAD']:
-            return PlainTextResponse("Method Not Allowed", status_code=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "title": "error", "error": ">  404 Not found"},
+                status_code=404)
 
         response = await call_next(request)
 
@@ -107,6 +113,23 @@ async def connect(request: Request):
     return templates.TemplateResponse("guides/connect.html", {"request": request, "title": "Connect Guide"})
 
 
+@app.get("/legal/tos")
+async def tos_docx(request: Request):
+    file_path = "website/static/legal/tos.docx"
+    if not os.path.isfile(file_path):
+        return {"error": "File not found"}
+    return FileResponse(
+        path=file_path,
+        media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        filename="CUCnet_TOS.docx"
+    )
+
+
+@app.get("/rules")
+async def rules(request: Request):
+    return templates.TemplateResponse("rules.html", {"request": request, "title": "Rules"})
+
+
 # Error handlers
 @app.exception_handler(500)
 async def internal_server_error_handler(request: Request, exc: Exception):
@@ -125,14 +148,14 @@ async def internal_server_error_handler(request: Request, exc: Exception):
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "error": ">  404 not found;"}, status_code=404)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "error": ">  404 not found", "message": f"Couldn't find page {request.url.path}"}, status_code=404)
     elif exc.status_code == 401:
         return templates.TemplateResponse("error.html", {"request": request, "title": "Unauthorized", "error": ">  401 Unauthorized"}, status_code=401)
     elif exc.status_code == 403:
         # Flask returned 200 here, but 403 is normal; I keep 403 status here:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "error": ">  403 Forbidden;"}, status_code=403)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "error": ">  403 Forbidden"}, status_code=403)
     elif exc.status_code == 500:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "error": ">  500 Internal server error;"}, status_code=500)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "error": ">  500 Internal server error"}, status_code=500)
     else:
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
