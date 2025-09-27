@@ -1,3 +1,4 @@
+sqlalchemy
 flask
 psutil
 python-telegram-bot

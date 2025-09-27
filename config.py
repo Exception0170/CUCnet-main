@@ -1,0 +1,9 @@
+import os
+
+DATABASE_NAME = "users.db"
+SESSION_PROTECTION = 'strong'
+REMEMBER_COOKIE_DURATION = 3600
+NEWS_BOT_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_CHAT_ID = int(os.getenv('ALLOWED_CHAT_ID'))
+NEWS_CHANNEL_ID = os.getenv('NEWS_CHANNEL_ID')
+NEWS_JSON_FILE = "news.json"
