@@ -177,6 +177,10 @@ async def error_forbidden():
     return PlainTextResponse("", status_code=403)
 
 
+@app.get("/dev/win95")
+async def test_win95(request: Request):
+    return templates.TemplateResponse("win95.html", {"request": request})
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

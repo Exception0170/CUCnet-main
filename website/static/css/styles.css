@@ -233,3 +233,41 @@ h1 {
   font-size: 1.2em;
   color: yellow;
 }
+/* textglow */
+body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
+  text-shadow: 0 0 2px currentColor;
+}
+
+.window, .note, .warning, .link-button, .blue-button, .list-entries li, .list-entries div {
+  box-shadow: 0 0 5px currentColor;
+}
+.window {
+  box-shadow: 0 0 5px currentColor;
+}
+
+.link-button, .window-top-bar {
+  box-shadow: 0 0 5px #ff9c25;
+  text-shadow: 0 0 2px #ff9c25;
+}
+
+.blue-button {
+  box-shadow: 0 0 5px #6488EA;
+  text-shadow: 0 0 2px #6488EA;
+}
+
+.note {
+  box-shadow: 0 0 5px #6488EA;
+  text-shadow: 0 0 2px #6488EA;
+}
+
+.warning {
+  box-shadow: 0 0 5px #D0342C;
+  text-shadow: 0 0 2px #D0342C;
+}
+
+.contact-name {
+  text-shadow: 0 0 3px yellow;
+}
+.animated-nickname {
+  text-shadow: 0 0 4px #FF0000, 0 0 6px #ff8000;
+}
