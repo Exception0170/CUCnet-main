@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, User
+from shared.models import Base, User
 import secrets
 import string
 from config import DATABASE_NAME
