@@ -90,7 +90,7 @@ async def status(request: Request):
 
 @app.get("/about", response_class=HTMLResponse)
 async def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request, "title": "About CUCnet"})
+    return templates.TemplateResponse("about-win95.html", {"request": request, "title": "About CUCnet"})
 
 
 @app.get("/contacts", response_class=HTMLResponse)
