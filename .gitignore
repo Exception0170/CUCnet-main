@@ -2,3 +2,4 @@
 __pycache__/
 news.json
 .env
+users.db
