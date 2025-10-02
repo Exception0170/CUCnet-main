@@ -360,6 +360,27 @@ class DatabaseManager:
         finally:
             session.close()
 
+    def get_user_by_username(self, username):
+        """Get user by username (without @)"""
+        session = self.get_session()
+        try:
+            user = session.query(User).filter_by(telegram_username=username).first()
+            if user:
+                return {
+                    'id': user.id,
+                    'telegram_id': user.telegram_id,
+                    'username': user.telegram_username,
+                    'is_verified': user.is_verified,
+                    'ignored': user.ignored,
+                    'site_password': user.site_password
+                }
+            return None
+        except Exception as e:
+            logger.error(f"Error getting user by username: {e}")
+            return None
+        finally:
+            session.close()
+
     def delete_profile(self, profile_id):
         """Delete profile and remove from WireGuard"""
         session = self.get_session()

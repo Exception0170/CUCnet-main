@@ -376,6 +376,77 @@ async def pending_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log_user_action(user_id, "/pending", "success", f"count={len(pending_users)}")
 
 
+# Add this to the Commands section after the pending_command
+
+async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обработчик команды /ban (только для администраторов)"""
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+
+    # Проверяем права администратора (admin chat only)
+    if not is_admin_chat(chat_id):
+        await update.message.reply_text("❌ У вас нет прав для этой команды")
+        return
+
+    # Проверяем наличие аргументов
+    if not context.args:
+        await update.message.reply_text(
+            "❌ Укажите ID пользователя или username:\n"
+            "Примеры:\n"
+            "/ban 123456789\n"
+            "/ban @username"
+        )
+        return
+
+    target = context.args[0]
+    admin_username = update.effective_user.username or 'не указан'
+
+    try:
+        # Try to parse as user ID
+        if target.isdigit():
+            target_user_id = int(target)
+            target_user = db.get_user(target_user_id)
+
+            if not target_user:
+                await update.message.reply_text(f"❌ Пользователь с ID {target_user_id} не найден")
+                return
+
+            # Ban the user
+            if db.reject_user(target_user_id):
+                target_username = target_user['username'] or 'не указан'
+                await update.message.reply_text(
+                    f"✅ Пользователь заблокирован\n"
+                    f"ID: {target_user_id}\n"
+                    f"Username: @{target_username}\n"
+                    f"Заблокировал: @{admin_username}"
+                )
+                log_user_action(user_id, "/ban", "success", f"target_id={target_user_id}")
+            else:
+                await update.message.reply_text("❌ Ошибка при блокировке пользователя")
+
+        # Handle username (with or without @)
+        elif target.startswith('@'):
+            target_username = target[1:]  # Remove @
+            # We need to search for user by username - this requires additional database method
+            await update.message.reply_text(
+                "⚠️ Поиск по username пока не поддерживается. "
+                "Используйте ID пользователя: /ban <user_id>"
+            )
+
+        else:
+            # Try as username without @
+            await update.message.reply_text(
+                "⚠️ Используйте ID пользователя или username с @:\n"
+                "/ban 123456789\n"
+                "/ban @username"
+            )
+
+    except ValueError:
+        await update.message.reply_text("❌ Неверный формат ID пользователя")
+    except Exception as e:
+        logger.error(f"Error in ban_command: {e}")
+        await update.message.reply_text("❌ Произошла ошибка при выполнении команды")
+
 async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик callback-запросов от inline-кнопок"""
     query = update.callback_query
@@ -695,6 +766,7 @@ def main():
     application.add_handler(CommandHandler("site_login", site_login_command))
     application.add_handler(CommandHandler("rejected", rejected_command))
     application.add_handler(CommandHandler("pending", pending_command))
+    application.add_handler(CommandHandler("ban", ban_command))
 
     # Add callback query handler
     application.add_handler(CallbackQueryHandler(handle_callback_query))
