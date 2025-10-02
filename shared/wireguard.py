@@ -42,10 +42,14 @@ PersistentKeepalive = 25
         return config
 
     def add_peer_to_server(self, public_key: str, allowed_ip: str) -> bool:
-        """Add peer to WireGuard server configuration"""
+        """Add peer to WireGuard server configuration and persist it."""
+        peer_config = f"""
+    [Peer]
+    PublicKey = {public_key}
+    AllowedIPs = {allowed_ip}/32
+    """
         try:
-            # This is a simplified implementation
-            # You might want to modify the actual WireGuard config file or use wg command
+            # Add the peer to the running wg interface (temporary)
             command = [
                 "sudo", "wg", "set", self.wg_interface,
                 "peer", public_key,
@@ -53,9 +57,19 @@ PersistentKeepalive = 25
             ]
             subprocess.run(command, check=True)
             logger.info(f"Added peer {public_key} with IP {allowed_ip}")
+
+            # Append peer to the wg config file for persistence
+            config_path = f"{self.wg_config_path}/{self.wg_interface}.conf"
+            with open(config_path, "a") as f:
+                f.write(peer_config)
+            logger.info(f"Persisted peer {public_key} to config file")
+
             return True
         except subprocess.CalledProcessError as e:
             logger.error(f"Error adding peer to server: {e}")
+            return False
+        except IOError as e:
+            logger.error(f"Failed to write peer to config file: {e}")
             return False
 
     def remove_peer_from_server(self, public_key: str) -> bool:
