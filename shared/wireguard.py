@@ -60,8 +60,7 @@ PersistentKeepalive = 25
 
             # Append peer to the wg config file for persistence
             config_path = f"{self.wg_config_path}/{self.wg_interface}.conf"
-            with open(config_path, "a") as f:
-                f.write(peer_config)
+            subprocess.run(["sudo", "tee", "-a", config_path], input=peer_config, text=True, check=True)
             logger.info(f"Persisted peer {public_key} to config file")
 
             return True
