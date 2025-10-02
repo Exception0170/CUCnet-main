@@ -164,7 +164,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
 
 @app.get("/error/unauth")
 async def error_unauth():
-    return PlainTextResponse("", status_code=401)
+    raise HTTPException(status_code=401, detail="Unauthorized")
 
 
 @app.get("/error/server")
@@ -174,7 +174,7 @@ async def error_server():
 
 @app.get("/error/forbidden")
 async def error_forbidden():
-    return PlainTextResponse("", status_code=403)
+    raise HTTPException(status_code=403, detail="Forbidden")
 
 
 @app.get("/dev/win95")

@@ -376,10 +376,6 @@ async def pending_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log_user_action(user_id, "/pending", "success", f"count={len(pending_users)}")
 
 
-# ============================================================================
-# CALLBACK AND MESSAGE HANDLERS
-# ============================================================================
-
 async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик callback-запросов от inline-кнопок"""
     query = update.callback_query
@@ -474,8 +470,19 @@ Username: @{username if username else 'не указан'}
         # Одобрение пользователя
         target_user_id = int(data.split(':', 1)[1])
         if is_admin_chat(chat_id):
+            # Get target user info for the message
+            target_user = db.get_user(target_user_id)
+            admin_username = query.from_user.username or 'не указан'
+
             if db.approve_user(target_user_id):
-                await query.edit_message_text(f"✅ Пользователь {target_user_id} одобрен")
+                # Update the admin message with username
+                target_username = target_user['username'] if target_user else 'не указан'
+                await query.edit_message_text(
+                    f"✅ Пользователь одобрен\n"
+                    f"ID: {target_user_id}\n"
+                    f"Username: @{target_username}\n"
+                    f"Одобрил: @{admin_username}"
+                )
                 log_user_action(user_id, "approve_user", "success", f"target={target_user_id}")
 
                 # Send welcome message to approved user
@@ -515,8 +522,19 @@ Username: @{username if username else 'не указан'}
         # Отклонение пользователя
         target_user_id = int(data.split(':', 1)[1])
         if is_admin_chat(chat_id):
+            # Get target user info for the message
+            target_user = db.get_user(target_user_id)
+            admin_username = query.from_user.username or 'не указан'
+
             if db.reject_user(target_user_id):
-                await query.edit_message_text(f"❌ Пользователь {target_user_id} отклонен")
+                # Update the admin message with username
+                target_username = target_user['username'] if target_user else 'не указан'
+                await query.edit_message_text(
+                    f"❌ Пользователь отклонен\n"
+                    f"ID: {target_user_id}\n"
+                    f"Username: @{target_username}\n"
+                    f"Отклонил: @{admin_username}"
+                )
                 log_user_action(user_id, "reject_user", "success", f"target={target_user_id}")
             else:
                 await query.edit_message_text("❌ Ошибка при отклонении пользователя")
@@ -527,14 +545,24 @@ Username: @{username if username else 'не указан'}
         # Разблокировка пользователя
         target_user_id = int(data.split(':', 1)[1])
         if is_admin_chat(chat_id):
+            # Get target user info for the message
+            target_user = db.get_user(target_user_id)
+            admin_username = query.from_user.username or 'не указан'
+
             if db.unban_user(target_user_id):
-                await query.edit_message_text(f"✅ Пользователь {target_user_id} разблокирован")
+                # Update the admin message with username
+                target_username = target_user['username'] if target_user else 'не указан'
+                await query.edit_message_text(
+                    f"✅ Пользователь разблокирован\n"
+                    f"ID: {target_user_id}\n"
+                    f"Username: @{target_username}\n"
+                    f"Разблокировал: @{admin_username}"
+                )
                 log_user_action(user_id, "unban_user", "success", f"target={target_user_id}")
             else:
                 await query.edit_message_text("❌ Ошибка при разблокировке пользователя")
         else:
             await query.edit_message_text("❌ У вас нет прав для этого действия")
-
 
 async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик текстовых сообщений"""
