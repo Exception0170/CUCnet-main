@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DATABASE_NAME = "users.db"
 SESSION_PROTECTION = 'strong'
