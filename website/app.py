@@ -69,7 +69,7 @@ app.add_middleware(SecurityMiddleware)
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     news_list = load_news()[:7]
-    return templates.TemplateResponse("index.html", {"request": request, "title": "main", "news_list": news_list})
+    return templates.TemplateResponse("index.html", {"request": request, "title": "CUCnet", "news_list": news_list})
 
 
 @app.get("/status", response_class=HTMLResponse)
