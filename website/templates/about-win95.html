@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/win95-styles.css') }}">
+    <title>Win95 test</title>
+</head>
+<body>
+    <div class="win95-window" style="left: 20px">
+        <div class="win95-window-top-bar">
+            <b>title.exe</b>
+            <div class="win95-window-buttons">
+                <button class="win95-fake-button"><b>_</b></button>
+                <button class="win95-fake-button">☐</button>
+                <button class="win95-fake-button"><b>X</b></button>
+            </div>
+        </div>
+        <div style="display: flex; align-items: flex-start; padding: 10px;">
+        <div style="flex: 1;">
+            <h1 style="font-family: Fixedsys; margin: 0 0 8px 0;">about://CUCnet</h1>
+            in cool Windows95 style by exception17<br>
+            <hr>
+            <a href="/" class="link-button">Home</a>
+            <a href="/guides" class="link-button">Guides</a>
+        </div>
+        <div style="margin-left: 10px;">
+            <img src="/static/img/pc.png" alt="pc-icon" class="win95-icon">
+        </div>
+    </div>
+    </div>
+    <div class="win95-window" style="left: 20px; top: 150px; height: auto">
+        <div class="win95-window-top-bar">
+            <b>notepad.exe: about.txt</b>
+            <div class="win95-window-buttons">
+                <button class="win95-fake-button"><b>_</b></button>
+                <button class="win95-fake-button">☐</button>
+                <button class="win95-fake-button"><b>X</b></button>
+            </div>
+        </div>
+        <div class="win95-menu-bar">
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Help</span>
+        </div>
+        <div class="win95-window-content" style="font-family: Fixedsys">
+            CUCnet = CU Community network<br>
+            Произносится: кукнет, виртуальная сеть коммюнити ЦУ<br>
+            <br>
+            Кукнет это частная приватная сеть (vpn) для студенческого использования.<br>
+            В ней можно хостить свои проекты, вебсайты, сервисы - и другие пользователи и студенты смогут получить к ней доступ.<br>
+            Каждый может захостить свой проект - для этого нужно лишь зайти в сеть и запусть сервер у себя на компьютере.<br>
+            В будущем будет возможность хостить небольшие вебсайты прямо у нас - воспользовавшись сервисом хостинга(в будущем)
+            <h3>Особенности</h3>
+            Наша сеть - уникальное пространство для разработки и тестирования айти проектов, клубы могут создавать свои веб-сайты.<br>
+
+        </div>
+    </div>
+    <div class="win95-window" style="left: 470px">
+        <div class="win95-window-top-bar">
+            <b>links.exe</b>
+            <div class="win95-window-buttons">
+                <button class="win95-fake-button"><b>_</b></button>
+                <button class="win95-fake-button">☐</button>
+                <button class="win95-fake-button"><b>X</b></button>
+            </div>
+        </div>
+        <div class="win95-window-content">
+            <a href="/contacts" class="link-button">Contacts</a>
+            <a href="https://t.me/Cucnet_bot" class="link-button">Our telegram bot</a>
+            <hr>
+            <a href="https://t.me/exception17" class="link-button">Exception17 (Admin support)</a>
+            <a href="https://t.me/andruwka0" class="link-button">Andruwka0 (event&rules support)</a>
+        </div>
+    </div>
+    <div class="win95-window" style="top: 150px; left:470px">
+        <div class="win95-window-top-bar">
+            <b>MSDOS Prompt</b>
+            <div class="win95-window-buttons">
+                <button class="win95-fake-button"><b>_</b></button>
+                <button class="win95-fake-button">☐</button>
+                <button class="win95-fake-button"><b>X</b></button>
+            </div>
+        </div>
+        <div class="win95-menu-bar">
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Help</span>
+        </div>
+        <div class="win95-window-content terminal-content">CUCnet Command Prompt v2.1.1995 (C) 2025
+C:\>dir
+ Volume in drive C has no label.
+ Volume serial number is DEAD-BEEF
+
+Directory of C:\
+
+01/10/2025  12:00 PM    &lt;DIR&gt;          WEBSITES
+01/10/2025  12:00 PM    &lt;DIR&gt;          PROGRAM FILES
+01/10/2025  12:00 PM               818  main.txt
+02/10/2025   4:25 PM               528  about.txt
+C:\> echo Привет, Добро пожаловать!
+Привет, Добро пожаловать!
+C:\>ssh root@gateway.cucnet -p 822
+Password:********
+Welcome to Ubuntu server!
+root@server ~#<span class="terminal-cursor">_</span></div>
+    </div>
+</body>
