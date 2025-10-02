@@ -100,23 +100,6 @@ def get_admin_approval_keyboard(user_id):
     return InlineKeyboardMarkup(keyboard)
 
 
-def get_ignored_users_keyboard(ignored_users):
-    keyboard = []
-    for user in ignored_users:
-        username = user['username'] or 'не указан'
-        keyboard.append([
-            InlineKeyboardButton(
-                f"Одобрить {user['user_id']}",
-                callback_data=f"approve_user:{user['user_id']}"
-            ),
-            InlineKeyboardButton(
-                f"Разблокировать {user['user_id']}",
-                callback_data=f"unban_user:{user['user_id']}"
-            )
-        ])
-    return InlineKeyboardMarkup(keyboard)
-
-
 # Commands
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик команды /start"""
@@ -321,17 +304,18 @@ async def rejected_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ignored_users = db.get_ignored_users()
 
     if not ignored_users:
-        await update.message.reply_text("📝 Нет отклоненных пользователей")
+        await update.message.reply_text("📝 Нет заблокированных пользователей")
         return
 
-    # Формируем сообщение с кнопками
-    message = "📋 Отклоненные пользователи:\n\n"
+    # Формируем простое сообщение со списком
+    message = "📋 Заблокированные пользователи:\n\n"
     for user in ignored_users:
         username = user['username'] or 'не указан'
         message += f"• ID: {user['user_id']}, @{username}\n"
 
-    keyboard = get_ignored_users_keyboard(ignored_users)
-    await update.message.reply_text(message, reply_markup=keyboard)
+    message += "\nИспользуйте /unban <ID или username> чтобы разблокировать"
+
+    await update.message.reply_text(message)
     log_user_action(user_id, "/rejected", "success", f"count={len(ignored_users)}")
 
 
@@ -376,8 +360,6 @@ async def pending_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log_user_action(user_id, "/pending", "success", f"count={len(pending_users)}")
 
 
-# Add this to the Commands section after the pending_command
-
 async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик команды /ban (только для администраторов)"""
     user_id = update.effective_user.id
@@ -394,7 +376,8 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "❌ Укажите ID пользователя или username:\n"
             "Примеры:\n"
             "/ban 123456789\n"
-            "/ban @username"
+            "/ban @username\n"
+            "/ban username"
         )
         return
 
@@ -425,27 +408,109 @@ async def ban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_text("❌ Ошибка при блокировке пользователя")
 
         # Handle username (with or without @)
-        elif target.startswith('@'):
-            target_username = target[1:]  # Remove @
-            # We need to search for user by username - this requires additional database method
-            await update.message.reply_text(
-                "⚠️ Поиск по username пока не поддерживается. "
-                "Используйте ID пользователя: /ban <user_id>"
-            )
-
         else:
-            # Try as username without @
-            await update.message.reply_text(
-                "⚠️ Используйте ID пользователя или username с @:\n"
-                "/ban 123456789\n"
-                "/ban @username"
-            )
+            # Remove @ if present
+            target_username = target.lstrip('@')
+            target_user = db.get_user_by_username(target_username)
+
+            if not target_user:
+                await update.message.reply_text(f"❌ Пользователь @{target_username} не найден")
+                return
+
+            # Ban the user
+            if db.reject_user(target_user['telegram_id']):
+                await update.message.reply_text(
+                    f"✅ Пользователь заблокирован\n"
+                    f"ID: {target_user['telegram_id']}\n"
+                    f"Username: @{target_username}\n"
+                    f"Заблокировал: @{admin_username}"
+                )
+                log_user_action(user_id, "/ban", "success", f"target_username={target_username}")
+            else:
+                await update.message.reply_text("❌ Ошибка при блокировке пользователя")
 
     except ValueError:
         await update.message.reply_text("❌ Неверный формат ID пользователя")
     except Exception as e:
         logger.error(f"Error in ban_command: {e}")
         await update.message.reply_text("❌ Произошла ошибка при выполнении команды")
+
+
+async def unban_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обработчик команды /unban (только для администраторов)"""
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+
+    # Проверяем права администратора (admin chat only)
+    if not is_admin_chat(chat_id):
+        await update.message.reply_text("❌ У вас нет прав для этой команды")
+        return
+
+    # Проверяем наличие аргументов
+    if not context.args:
+        await update.message.reply_text(
+            "❌ Укажите ID пользователя или username:\n"
+            "Примеры:\n"
+            "/unban 123456789\n"
+            "/unban @username\n"
+            "/unban username"
+        )
+        return
+
+    target = context.args[0]
+    admin_username = update.effective_user.username or 'не указан'
+
+    try:
+        # Try to parse as user ID
+        if target.isdigit():
+            target_user_id = int(target)
+            target_user = db.get_user(target_user_id)
+
+            if not target_user:
+                await update.message.reply_text(f"❌ Пользователь с ID {target_user_id} не найден")
+                return
+
+            # Unban the user
+            if db.unban_user(target_user_id):
+                target_username = target_user['username'] or 'не указан'
+                await update.message.reply_text(
+                    f"✅ Пользователь разблокирован\n"
+                    f"ID: {target_user_id}\n"
+                    f"Username: @{target_username}\n"
+                    f"Разблокировал: @{admin_username}"
+                )
+                log_user_action(user_id, "/unban", "success", f"target_id={target_user_id}")
+            else:
+                await update.message.reply_text("❌ Ошибка при разблокировке пользователя")
+
+        # Handle username (with or without @)
+        else:
+            # Remove @ if present
+            target_username = target.lstrip('@')
+            target_user = db.get_user_by_username(target_username)
+
+            if not target_user:
+                await update.message.reply_text(f"❌ Пользователь @{target_username} не найден")
+                return
+
+            # Unban the user
+            if db.unban_user(target_user['telegram_id']):
+                await update.message.reply_text(
+                    f"✅ Пользователь разблокирован\n"
+                    f"ID: {target_user['telegram_id']}\n"
+                    f"Username: @{target_username}\n"
+                    f"Разблокировал: @{admin_username}"
+                )
+                log_user_action(user_id, "/unban", "success", f"target_username={target_username}")
+            else:
+                await update.message.reply_text("❌ Ошибка при разблокировке пользователя")
+
+    except ValueError:
+        await update.message.reply_text("❌ Неверный формат ID пользователя")
+    except Exception as e:
+        logger.error(f"Error in unban_command: {e}")
+        await update.message.reply_text("❌ Произошла ошибка при выполнении команды")
+
 
 async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик callback-запросов от inline-кнопок"""
@@ -612,28 +677,6 @@ Username: @{username if username else 'не указан'}
         else:
             await query.edit_message_text("❌ У вас нет прав для этого действия")
 
-    elif data.startswith('unban_user:'):
-        # Разблокировка пользователя
-        target_user_id = int(data.split(':', 1)[1])
-        if is_admin_chat(chat_id):
-            # Get target user info for the message
-            target_user = db.get_user(target_user_id)
-            admin_username = query.from_user.username or 'не указан'
-
-            if db.unban_user(target_user_id):
-                # Update the admin message with username
-                target_username = target_user['username'] if target_user else 'не указан'
-                await query.edit_message_text(
-                    f"✅ Пользователь разблокирован\n"
-                    f"ID: {target_user_id}\n"
-                    f"Username: @{target_username}\n"
-                    f"Разблокировал: @{admin_username}"
-                )
-                log_user_action(user_id, "unban_user", "success", f"target={target_user_id}")
-            else:
-                await query.edit_message_text("❌ Ошибка при разблокировке пользователя")
-        else:
-            await query.edit_message_text("❌ У вас нет прав для этого действия")
 
 async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик текстовых сообщений"""
@@ -707,10 +750,6 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
         context.user_data.clear()
 
 
-# ============================================================================
-# LOGGING SETUP
-# ============================================================================
-
 def setup_logging():
     """Setup logging configuration"""
     # Create logs directory if it doesn't exist
@@ -767,6 +806,7 @@ def main():
     application.add_handler(CommandHandler("rejected", rejected_command))
     application.add_handler(CommandHandler("pending", pending_command))
     application.add_handler(CommandHandler("ban", ban_command))
+    application.add_handler(CommandHandler("unban", unban_command))
 
     # Add callback query handler
     application.add_handler(CallbackQueryHandler(handle_callback_query))
