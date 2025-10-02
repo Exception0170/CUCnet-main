@@ -44,9 +44,9 @@ PersistentKeepalive = 25
     def add_peer_to_server(self, public_key: str, allowed_ip: str) -> bool:
         """Add peer to WireGuard server configuration and persist it."""
         peer_config = f"""
-    [Peer]
-    PublicKey = {public_key}
-    AllowedIPs = {allowed_ip}/32
+[Peer]
+PublicKey = {public_key}
+AllowedIPs = {allowed_ip}/32
     """
         try:
             # Add the peer to the running wg interface (temporary)
