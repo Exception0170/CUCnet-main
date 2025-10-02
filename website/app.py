@@ -76,7 +76,7 @@ async def index(request: Request):
 async def status(request: Request):
     services_status = check_multiple_services(
         [['ngircd', 'IRC'], ['wg-quick@wg0', 'Network']],
-        [['python3 bot.py', 'Telegram Bot']]
+        [['python3 -m bot.main', '@Cucnet_bot']]
     )
     active_count = sum(1 for service in services_status if service['state'] == 'Active')
     return templates.TemplateResponse("status.html", {
