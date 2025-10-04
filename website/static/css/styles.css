@@ -271,3 +271,18 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
 .animated-nickname {
   text-shadow: 0 0 4px #FF0000, 0 0 6px #ff8000;
 }
+.account-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+.account-topbar .home-button {
+  margin-right: 15px;
+}
+
+.account-topbar .page-title {
+  font-weight: bold;
+  margin: 0;
+  flex-grow: 1;
+}

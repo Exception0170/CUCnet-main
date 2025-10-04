@@ -1,0 +1,13 @@
+<div class="account-topbar">
+    <a href="/" class="link-button home-button">Home</a>
+    <h1 class="page-title">{{ page_title or "sys://unnamed" }}</h1>
+    <div class="account-controls">
+        {% if user %}
+            <span class="account-username">{{ user.username }}</span>
+            <a href="/account/dashboard" class="link-button">Dashboard</a>
+            <a href="/account/logout" class="link-button">Logout</a>
+        {% else %}
+            <a href="/account/login" class="link-button">Login</a>
+        {% endif %}
+    </div>
+</div>

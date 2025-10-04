@@ -22,7 +22,12 @@ def load_news():
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     news_list = load_news()[:7]
-    return templates.TemplateResponse("index.html", {"request": request, "title": "CUCnet", "news_list": news_list})
+    return templates.TemplateResponse("index.html",{
+        "request": request,
+        "title": "CUCnet",
+        "news_list": news_list,
+        "page_title": "sys://CU Community network"
+    })
 
 
 @router.get("/status", response_class=HTMLResponse)
@@ -37,7 +42,8 @@ async def status(request: Request):
         "title": "status",
         "services": services_status,
         "active": active_count,
-        "total": len(services_status)
+        "total": len(services_status),
+        "page_title": "sys://CUCnet/status"
     })
 
 
@@ -48,22 +54,38 @@ async def about(request: Request):
 
 @router.get("/contacts", response_class=HTMLResponse)
 async def contacts(request: Request):
-    return templates.TemplateResponse("contacts.html", {"request": request, "title": "Contacts"})
+    return templates.TemplateResponse("contacts.html", {
+        "request": request,
+        "title": "Contacts",
+        "page_title": "contacts://"
+    })
 
 
 @router.get("/guides", response_class=HTMLResponse)
 async def guides(request: Request):
-    return templates.TemplateResponse("guides.html", {"request": request, "title": "Guides"})
+    return templates.TemplateResponse("guides.html", {
+        "request": request,
+        "title": "Guides",
+        "page_title": "guide://"
+    })
 
 
 @router.get("/guides/irc", response_class=HTMLResponse)
 async def irc(request: Request):
-    return templates.TemplateResponse("guides/irc.html", {"request": request, "title": "IRC Guide"})
+    return templates.TemplateResponse("guides/irc.html", {
+        "request": request,
+        "title": "IRC Guide",
+        "page_title": "guide://IRC"
+    })
 
 
 @router.get("/guides/connect", response_class=HTMLResponse)
 async def connect(request: Request):
-    return templates.TemplateResponse("guides/connect.html", {"request": request, "title": "Connect Guide"})
+    return templates.TemplateResponse("guides/connect.html", {
+        "request": request,
+        "title": "Connect Guide",
+        "page_title": "guide://connect"
+    })
 
 
 @router.get("/legal/tos")
@@ -80,4 +102,8 @@ async def tos_docx(request: Request):
 
 @router.get("/rules")
 async def rules(request: Request):
-    return templates.TemplateResponse("rules.html", {"request": request, "title": "Rules"})
+    return templates.TemplateResponse("rules.html", {
+        "request": request,
+        "title": "Rules",
+        "page_title": "sys://rules"
+    })
