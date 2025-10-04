@@ -1,0 +1,9 @@
+accounts:
+DNS control
+wg profile control
+docs:
+connect docs
+proxy docs
+dns docs
+small changes:
+remake error.html for easier pringing
