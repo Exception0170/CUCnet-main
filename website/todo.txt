@@ -5,5 +5,3 @@ docs:
 connect docs
 proxy docs
 dns docs
-small changes:
-remake error.html for easier printing

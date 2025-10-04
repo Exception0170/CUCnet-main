@@ -28,7 +28,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         if request.method == 'CONNECT':
             return templates.TemplateResponse(
                 "error.html",
-                {"request": request, "title": "error", "error": ">  405 Method not allowed"},
+                {"request": request, "title": "error", "error": "405 Method not allowed"},
                 status_code=405)
 
         # Block suspicious paths
@@ -36,7 +36,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         if any(suspicious in request.url.path for suspicious in suspicious_paths):
             return templates.TemplateResponse(
                 "error.html",
-                {"request": request, "title": "error", "error": ">  404 Not found"},
+                {"request": request, "title": "error", "error": "404 Not found;;"},
                 status_code=404)
 
         response = await call_next(request)
@@ -55,7 +55,7 @@ async def internal_server_error_handler(request: Request, exc: Exception):
     return templates.TemplateResponse(
         "error.html",
         {
-            "error": ">  500 Internal Server Error",
+            "error": "500 Internal Server Error",
             "request": request,
             "message": str(exc)
         },
@@ -66,14 +66,14 @@ async def internal_server_error_handler(request: Request, exc: Exception):
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "error": ">  404 not found", "message": f"Couldn't find page {request.url.path}"}, status_code=404)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Not found", "error": "404 not found", "message": f"Couldn't find page {request.url.path}"}, status_code=404)
     elif exc.status_code == 401:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Unauthorized", "error": ">  401 Unauthorized"}, status_code=401)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Unauthorized", "error": "401 Unauthorized"}, status_code=401)
     elif exc.status_code == 403:
         # Flask returned 200 here, but 403 is normal; I keep 403 status here:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "error": ">  403 Forbidden"}, status_code=403)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Forbidden", "error": "403 Forbidden"}, status_code=403)
     elif exc.status_code == 500:
-        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "error": ">  500 Internal server error"}, status_code=500)
+        return templates.TemplateResponse("error.html", {"request": request, "title": "Server error", "error": "500 Internal server error"}, status_code=500)
     else:
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
