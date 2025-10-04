@@ -3,6 +3,6 @@ starlette
 sqlalchemy
 psutil
 python-telegram-bot
-dotenv
+python-dotenv
 jinja2
 uvicorn

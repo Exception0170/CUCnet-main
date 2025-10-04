@@ -6,4 +6,4 @@ connect docs
 proxy docs
 dns docs
 small changes:
-remake error.html for easier pringing
+remake error.html for easier printing
