@@ -8,9 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from website.getservice import check_multiple_services
-import json
-import os
+from website.routers import webpages, dev
 
 app = FastAPI(
     docs_url=None,
@@ -21,16 +19,6 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="website/static", html=True), name="static")
 
 templates = Jinja2Templates(directory="website/templates")
-
-
-def load_news():
-    try:
-        with open('news.json', 'r', encoding='utf-8') as f:
-            news_list = json.load(f)
-            news_list.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-            return news_list
-    except FileNotFoundError:
-        return []
 
 
 # Middleware for security checks (similar to before_request in Flask)
@@ -61,76 +49,6 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         return response
 
 
-app.add_middleware(SecurityMiddleware)
-
-
-# Routes
-
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    news_list = load_news()[:7]
-    return templates.TemplateResponse("index.html", {"request": request, "title": "CUCnet", "news_list": news_list})
-
-
-@app.get("/status", response_class=HTMLResponse)
-async def status(request: Request):
-    services_status = check_multiple_services(
-        [['ngircd', 'IRC'], ['wg-quick@wg0', 'Network']],
-        [['python3 -m bot.main', '@Cucnet_bot']]
-    )
-    active_count = sum(1 for service in services_status if service['state'] == 'Active')
-    return templates.TemplateResponse("status.html", {
-        "request": request,
-        "title": "status",
-        "services": services_status,
-        "active": active_count,
-        "total": len(services_status)
-    })
-
-
-@app.get("/about", response_class=HTMLResponse)
-async def about(request: Request):
-    return templates.TemplateResponse("about-win95.html", {"request": request, "title": "About CUCnet"})
-
-
-@app.get("/contacts", response_class=HTMLResponse)
-async def contacts(request: Request):
-    return templates.TemplateResponse("contacts.html", {"request": request, "title": "Contacts"})
-
-
-@app.get("/guides", response_class=HTMLResponse)
-async def guides(request: Request):
-    return templates.TemplateResponse("guides.html", {"request": request, "title": "Guides"})
-
-
-@app.get("/guides/irc", response_class=HTMLResponse)
-async def irc(request: Request):
-    return templates.TemplateResponse("guides/irc.html", {"request": request, "title": "IRC Guide"})
-
-
-@app.get("/guides/connect", response_class=HTMLResponse)
-async def connect(request: Request):
-    return templates.TemplateResponse("guides/connect.html", {"request": request, "title": "Connect Guide"})
-
-
-@app.get("/legal/tos")
-async def tos_docx(request: Request):
-    file_path = "website/static/legal/tos.docx"
-    if not os.path.isfile(file_path):
-        return {"error": "File not found"}
-    return FileResponse(
-        path=file_path,
-        media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        filename="CUCnet_TOS.docx"
-    )
-
-
-@app.get("/rules")
-async def rules(request: Request):
-    return templates.TemplateResponse("rules.html", {"request": request, "title": "Rules"})
-
-
-# Error handlers
 @app.exception_handler(500)
 async def internal_server_error_handler(request: Request, exc: Exception):
     """Handle 500 errors with a custom page"""
@@ -159,27 +77,10 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     else:
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
+app.add_middleware(SecurityMiddleware)
 
-# Dev/test routes for errors
-
-@app.get("/error/unauth")
-async def error_unauth():
-    raise HTTPException(status_code=401, detail="Unauthorized")
-
-
-@app.get("/error/server")
-async def error_server():
-    raise Exception("Example error")
-
-
-@app.get("/error/forbidden")
-async def error_forbidden():
-    raise HTTPException(status_code=403, detail="Forbidden")
-
-
-@app.get("/dev/win95")
-async def test_win95(request: Request):
-    return templates.TemplateResponse("win95.html", {"request": request})
+app.include_router(webpages.router, tags=["webpages"])
+app.include_router(dev.router, tags=["dev", "error"])
 
 if __name__ == "__main__":
     import uvicorn
