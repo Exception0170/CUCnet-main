@@ -11,6 +11,10 @@ a{
   font-family: 'TDAtext';
   src: url('../fonts/TDAtext.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'Fixedsys';
+  src: url('../fonts/Fixedsys.ttf') format('truetype');
+}
 
 body {
   background-color: #331900;

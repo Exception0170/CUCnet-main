@@ -1,6 +1,6 @@
 <div class="account-topbar">
     <a href="/" class="link-button home-button">Home</a>
-    <h1 class="page-title">{{ page_title or "sys://unnamed" }}</h1>
+    <h1 class="page-title" style="font-size: auto">{{ page_title or "sys://unnamed" }}</h1>
     <div class="account-controls">
         {% if user %}
             <span class="account-username">{{ user.username }}</span>

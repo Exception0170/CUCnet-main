@@ -57,7 +57,7 @@ async def internal_server_error_handler(request: Request, exc: Exception):
         {
             "error": "500 Internal Server Error",
             "request": request,
-            "message": f"Server error occurred: '{str(exc)}', please contact administrator.",
+            "message": f"Произошла ошибка: '{str(exc)}', пожалуйста, сообщите администратору.",
             "title": "Error",
             "page_title": "sys://error"
         },
@@ -73,21 +73,21 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
             "title": "Not found",
             "error": "404 not found",
             "page_title": "sys://error",
-            "message": f"Couldn't find page {request.url.path}"}, status_code=404)
+            "message": f"Страница {request.url.path} не найдена."}, status_code=404)
     elif exc.status_code == 401:
         return templates.TemplateResponse("error.html", {
             "request": request,
             "title": "Unauthorized",
             "error": "401 Unauthorized",
             "page_title": "sys://error",
-            "message": f"Please login first before accessing {request.url.path}"}, status_code=401)
+            "message": f"Пожалуйста, авторизуйтесь для доступа к {request.url.path}"}, status_code=401)
     elif exc.status_code == 403:
         return templates.TemplateResponse("error.html", {
             "request": request,
             "title": "Forbidden",
             "error": "403 Forbidden",
             "page_title": "sys://error",
-            "message": f"You are not allowed to access {request.url.path}"}, status_code=403)
+            "message": f"Доступ к {request.url.path} запрещен."}, status_code=403)
     elif exc.status_code == 500:
         return templates.TemplateResponse("error.html", {
             "request": request,

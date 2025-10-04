@@ -61,30 +61,30 @@ async def contacts(request: Request):
     })
 
 
-@router.get("/guides", response_class=HTMLResponse)
+@router.get("/docs", response_class=HTMLResponse)
 async def guides(request: Request):
-    return templates.TemplateResponse("guides.html", {
+    return templates.TemplateResponse("docs.html", {
         "request": request,
-        "title": "Guides",
-        "page_title": "guide://"
+        "title": "Docs",
+        "page_title": "docs://"
     })
 
 
-@router.get("/guides/irc", response_class=HTMLResponse)
+@router.get("/docs/irc", response_class=HTMLResponse)
 async def irc(request: Request):
-    return templates.TemplateResponse("guides/irc.html", {
+    return templates.TemplateResponse("docs/irc.html", {
         "request": request,
         "title": "IRC Guide",
-        "page_title": "guide://IRC"
+        "page_title": "docs://IRC"
     })
 
 
-@router.get("/guides/connect", response_class=HTMLResponse)
+@router.get("/docs/connect", response_class=HTMLResponse)
 async def connect(request: Request):
-    return templates.TemplateResponse("guides/connect.html", {
+    return templates.TemplateResponse("docs/connect.html", {
         "request": request,
         "title": "Connect Guide",
-        "page_title": "guide://connect"
+        "page_title": "docs://connect"
     })
 
 
