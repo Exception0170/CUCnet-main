@@ -276,6 +276,7 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
   text-shadow: 0 0 4px #FF0000, 0 0 6px #ff8000;
 }
 .account-topbar {
+  font-size:clamp(0.75rem, 4vw, 1.5rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
