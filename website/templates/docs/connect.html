@@ -1,13 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="window">
-  <div class="window-top-bar">notepad.exe: connect.txt<span class="fake-close">❌</span></div>
-  <div class="window-content">
-    <h2>Подключение к сети</h2>
-    Для того, чтобы подключиться к сети, нужно скачать ПО Wireguard: <a href="https://www.wireguard.com/install/">Ссылка</a><br>
-    Далее, нужно получить файл <span style="color:crimson">.conf</span> - через телеграмм бота или от <span style="color:cornflowerblue">@exception17</span>, если бот не работает.<br>
-    В wireguard-е импортируем наш файл конфигурации - и подключаемся к сети.
-  </div>
+<div class="window" style="width:90%; max-width: 900px">
+    <div class="window-top-bar">notepad.exe: connect.txt<span class="fake-close">❌</span></div>
+    <div class="window-content">
+        <h2>Подключение к сети</h2>
+        Для того, чтобы подключиться к сети, нужно скачать ПО Wireguard: <a href="https://www.wireguard.com/install/">Ссылка</a><br>
+        Далее, нужно получить файл <span style="color:crimson">.conf</span> - через <a href="https://t.me/Cucnet_bot">телеграмм бота</a> (Обращайтесь к <a href="https://t.me/exception17" style="color:cornflowerblue">@exception17</a>, если бот не работает)<br>
+        В wireguard-е импортируем наш файл конфигурации - и подключаемся к сети.
+        <div class="list-entries">
+            <div><span class="gt">MacOS:</span> запустите и выберите "импортировать туннель из файла"</div>
+            <div><span class="gt">Windows:</span> запустите GUI и импортируйте туннель из файла</div>
+            <div><span class="gt">Mobile:</span> скачайте приложение из AppStore/Google play и импортируйте файл</div>
+            <div>
+                <span class="gt">Lunix:</span> установите пакет <span class="linux-highlight">wireguard</span><br>
+                Скопируйте конфигурационный файл в <span class="linux-highlight">/etc/wireguard/[имя].conf</span><br>
+                Запустите интерфейс: <span class="linux-highlight">sudo systemctl start wg-quick@[имя]</span><br>
+                Для управления можно использовать утилиту <span class="linux-highlight">wg</span>, или на некоторых дистрибутивах появится интерфейс в настройках сети.
+            </div>
+        </div>
+        <h3>Проверка подключения</h3>
+        Для проверки достаточно пропинговать центральный сервер: <span class="linux-highlight">10.8.0.1</span><br>
+        Для проверки DNS проверьте доступность: <span class="linux-highlight">server.cucnet</span>
+    </div>
 </div>
 <a href="/docs" class="link-button">< Назад</a>
+<style>.linux-highlight{color:yellow;font-family:Fixedsys}.gt{color:green;}</style>
 {% endblock %}

@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DATABASE_NAME = "users.db"
-SESSION_PROTECTION = 'strong'
-REMEMBER_COOKIE_DURATION = 3600
+SESSION_TIME = 3600 * 6
+SESSION_SECRET = os.getenv('SESSION_SECRET')
 NEWS_BOT_TOKEN = os.getenv('NEWS_BOT_TOKEN')
 ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID'))
 NEWS_CHANNEL_ID = os.getenv('NEWS_CHANNEL_ID')

@@ -4,5 +4,6 @@ sqlalchemy
 psutil
 python-telegram-bot
 python-dotenv
+python-multipart
 jinja2
 uvicorn

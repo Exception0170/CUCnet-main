@@ -128,10 +128,8 @@ body::before {
   box-sizing: border-box;
   font-size: 1em;
   border-radius: 0;
-  .note h3 {
-    margin:0 !important;
-    padding:0 !important;
-  }
+  font-weight: bold;
+  display: inline-block;
 }
 
 .warning {
@@ -290,4 +288,257 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
   font-weight: bold;
   margin: 0;
   flex-grow: 1;
+}
+
+/* Form Input Styles for CRT Theme */
+input, textarea, select {
+  background-color: #331900;
+  color: #ff9c25;
+  border: 2px solid #ff9c25;
+  font-family: 'TDAtext', monospace;
+  font-size: 1em;
+  padding: 8px 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  outline: none;
+  text-shadow: 0 0 2px currentColor;
+  box-shadow: 0 0 5px #ff9c25;
+  transition: all 0.3s ease;
+}
+
+/* Input focus state */
+input:focus, textarea:focus, select:focus {
+  border-color: #6488EA;
+  box-shadow: 0 0 8px #6488EA;
+  background-color: #4e300b;
+}
+
+/* Placeholder text styling */
+input::placeholder, textarea::placeholder {
+  color: #ff9c25;
+  opacity: 0.7;
+  text-shadow: 0 0 2px #ff9c25;
+}
+
+/* Text input specific */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Textarea specific */
+textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Select dropdown */
+select {
+  width: 100%;
+  max-width: 400px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ff9c25' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #331900;
+  border: 2px solid #ff9c25;
+  position: relative;
+  cursor: pointer;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #ff9c25;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: #331900;
+  font-size: 16px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: none;
+}
+
+input[type="checkbox"]:hover {
+  border-color: #6488EA;
+  box-shadow: 0 0 5px #6488EA;
+}
+
+/* Radio button styling */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background-color: #331900;
+  border: 2px solid #ff9c25;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+input[type="radio"]:checked {
+  background-color: #ff9c25;
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #331900;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+input[type="radio"]:hover {
+  border-color: #6488EA;
+  box-shadow: 0 0 5px #6488EA;
+}
+
+/* File input styling */
+input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #ff9c25;
+  color: #331900;
+  border: 2px solid #ff9c25;
+  padding: 6px 12px;
+  margin-right: 10px;
+  font-family: 'TDAtext', monospace;
+  cursor: pointer;
+  text-shadow: none;
+  box-shadow: 0 0 5px #ff9c25;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #331900;
+  color: #ff9c25;
+}
+
+/* Form group styling for better layout */
+.form-group {
+  margin: 15px 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ff9c25;
+  text-shadow: 0 0 2px currentColor;
+}
+
+.form-group .form-help {
+  font-size: 0.9em;
+  color: #ff9c25;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+/* Disabled input state */
+input:disabled, textarea:disabled, select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #8B4513;
+}
+
+input:disabled::placeholder {
+  color: #8B4513;
+}
+
+/* Error state for form validation */
+input.error, textarea.error, select.error {
+  border-color: #D0342C;
+  box-shadow: 0 0 5px #D0342C;
+  background-color: #4e1a17;
+}
+
+.error-message {
+  color: #D0342C;
+  font-size: 0.9em;
+  margin-top: 5px;
+  text-shadow: 0 0 2px #D0342C;
+}
+
+/* Success state */
+input.success, textarea.success, select.success {
+  border-color: #6488EA;
+  box-shadow: 0 0 5px #6488EA;
+}
+
+/* Fieldset and legend styling */
+fieldset {
+  border: 2px solid #ff9c25;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(51, 25, 0, 0.3);
+}
+
+legend {
+  color: #ff9c25;
+  padding: 0 10px;
+  font-weight: bold;
+  text-shadow: 0 0 2px currentColor;
+}
+
+/* Range input styling */
+input[type="range"] {
+  width: 100%;
+  height: 8px;
+  background: #331900;
+  border: 2px solid #ff9c25;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ff9c25;
+  cursor: pointer;
+  box-shadow: 0 0 5px #ff9c25;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ff9c25;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px #ff9c25;
+}
+
+/* Search input specific */
+input[type="search"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23ff9c25' d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 35px;
 }
