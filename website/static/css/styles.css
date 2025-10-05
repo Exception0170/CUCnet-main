@@ -198,14 +198,13 @@ body::before {
 }
 
 .animated-nickname {
-  background-image: linear-gradient(to right, #FF0000, #FFFF00);  /* Red to orange gradient */
+  background-image: linear-gradient(to right, #FF0000, #FFFF00);
   -webkit-background-clip: text;  /* For WebKit browsers like Chrome */
   background-clip: text;
   color: transparent;  /* Makes the text transparent to show the gradient */
   font-family: 'VT323', monospace;  /* Matches your retro theme */
-  display: inline-block;  /* Ensures it behaves like inline text */
+  word-wrap: break-word;
   animation: gradientAnimation 5s linear infinite;  /* Animates the gradient; adjust duration as needed */
-  white-space: nowrap;  /* Prevents wrapping for a clean effect */
   font-size: 1.5em;
 }
 

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="window" style="width: 80%; max-width: 600px">
+	<div class="window-top-bar">/bin/login<span class="fake-close">❌</span></div>
+	<div class="window-content">
+        <h1 style="color:yellow; font-family: TDAtext; text-align:center">> Account login <</h1>
+        <div class="note">ℹ Регистрация происходит через <a href="https://t.me/Cucnet_bot" style="color:#331900">бота</a>.</div>
+        <!-- Warning div - shown if error_message exists -->
+        {% if error_message %}
+            <div class="warning" style="margin: 15px 0;">
+                ⚠ {{ error_message }}
+            </div>
+        {% endif %}
+        <div class="list-entries">
+            <form method="POST" id="loginForm" class="login-form">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" required placeholder="юзернейм телеграмма"><br>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required placeholder="пароль"><br>
+                <button type="submit" style="font-family: TDAtext" class="link-button"> > Login < </button>
+            </form>
+        </div>
+	</div>
+</div>
+<script>
+// Optional: Hide warning when user starts typing (for better UX)
+document.addEventListener('DOMContentLoaded', function() {
+    const warningDiv = document.querySelector('.warning');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    if (warningDiv) {
+        function hideWarning() {
+            warningDiv.style.display = 'none';
+        }
+
+        if (usernameInput) usernameInput.addEventListener('input', hideWarning);
+        if (passwordInput) passwordInput.addEventListener('input', hideWarning);
+    }
+});
+</script>
+{% endblock %}
