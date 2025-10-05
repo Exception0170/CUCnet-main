@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Text input -->
+<div class="form-group">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" placeholder="Enter your username">
+</div>
+
+<!-- Password input -->
+<div class="form-group">
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" placeholder="Enter your password">
+</div>
+
+<!-- Checkbox -->
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="remember"> Remember me
+  </label>
+</div>
+
+<!-- Radio buttons -->
+<div class="form-group">
+  <label>Profile Type:</label>
+  <label><input type="radio" name="type" value="personal"> Personal</label>
+  <label><input type="radio" name="type" value="webserver"> Webserver</label>
+</div>
+
+<!-- Select dropdown -->
+<div class="form-group">
+  <label for="country">Country:</label>
+  <select id="country" name="country">
+    <option value="">Select a country</option>
+    <option value="us">United States</option>
+    <option value="uk">United Kingdom</option>
+  </select>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" placeholder="Enter description..."></textarea>
+</div>
+{% endblock %}
