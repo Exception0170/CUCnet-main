@@ -32,6 +32,11 @@ async def error_forbidden():
     raise HTTPException(status_code=403, detail="Forbidden")
 
 
+@router.get("/error/bad")
+async def error_forbidden():
+    raise HTTPException(status_code=400, detail="Bad request")
+
+
 @router.get("/win95")
 async def test_win95(request: Request):
     return templates.TemplateResponse("win95.html", {"request": request})

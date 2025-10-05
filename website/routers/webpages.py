@@ -26,7 +26,7 @@ async def index(request: Request):
         "request": request,
         "title": "CUCnet",
         "news_list": news_list,
-        "page_title": "sys://CU Community network"
+        "page_title": "sys://cucnet"
     })
 
 

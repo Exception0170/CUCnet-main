@@ -198,7 +198,7 @@ body::before {
 }
 
 .animated-nickname {
-  background-image: linear-gradient(to right, #FF0000, #ff8000);  /* Red to orange gradient */
+  background-image: linear-gradient(to right, #FF0000, #FFFF00);  /* Red to orange gradient */
   -webkit-background-clip: text;  /* For WebKit browsers like Chrome */
   background-clip: text;
   color: transparent;  /* Makes the text transparent to show the gradient */
@@ -236,7 +236,7 @@ h1 {
   color: yellow;
 }
 /* textglow */
-body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
+body, a, h1, h2, h3, h4, h5, h6, .contact-name{
   text-shadow: 0 0 2px currentColor;
 }
 
@@ -269,9 +269,6 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name, .animated-nickname {
 
 .contact-name {
   text-shadow: 0 0 3px yellow;
-}
-.animated-nickname {
-  text-shadow: 0 0 4px #FF0000, 0 0 6px #ff8000;
 }
 .account-topbar {
   font-size:clamp(0.75rem, 4vw, 1.5rem);
@@ -369,7 +366,7 @@ input[type="checkbox"]:checked::after {
   content: "✓";
   position: absolute;
   color: #331900;
-  font-size: 16px;
+  font-size: 20px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
