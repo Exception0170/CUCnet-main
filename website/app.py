@@ -5,10 +5,13 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
+import os
 
-from website.routers import webpages, dev
+from website.routers import main_router
+from config import SESSION_SECRET, SESSION_TIME
 
 app = FastAPI(
     docs_url=None,
@@ -19,6 +22,16 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="website/static", html=True), name="static")
 
 templates = Jinja2Templates(directory="website/templates")
+
+# Session Middleware - Add this FIRST
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=SESSION_SECRET,
+    session_cookie="vpn_session",
+    max_age=SESSION_TIME,
+    same_site="lax",
+    https_only=False  # Set to True in production with HTTPS
+)
 
 
 # Middleware for security checks (similar to before_request in Flask)
@@ -85,23 +98,35 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         return templates.TemplateResponse("error.html", {
             "request": request,
             "title": "Forbidden",
-            "error": "403 Forbidden",
+            "error": "403 Forbidden ⛔",
             "page_title": "sys://error",
             "message": f"Доступ к {request.url.path} запрещен."}, status_code=403)
-    elif exc.status_code == 500:
+    elif exc.status_code == 405:
         return templates.TemplateResponse("error.html", {
             "request": request,
-            "title": "Server error",
-            "error": "500 Internal Server Error",
+            "title": "Method Not Allowed",
+            "error": "405 Method Not Allowed ⛔",
             "page_title": "sys://error",
-            "message": f"A server error occurred: '{str(exc)}', please contact administrator."}, status_code=500)
+            "message": f"Метод {request.method} на {request.url.path} запрещен."}, status_code=403)
+    elif exc.status_code == 400:
+        return templates.TemplateResponse("error.html", {
+            "request": request,
+            "title": "Bad request",
+            "error": "400 Bad Request",
+            "page_title": "sys://error",
+            "message": f"Произошла ошибка при обработке запроса на {request.url.path}."}, status_code=400)
+    elif exc.status_code == 501:
+        return templates.TemplateResponse("error.html", {
+            "request": request,
+            "title": "Not implemented",
+            "error": "501 Not Implemented",
+            "page_title": "sys://error",
+            "message": f"Метод {request.method} еще не написан на странице: {request.url.path}."}, status_code=501)
     else:
         return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
 app.add_middleware(SecurityMiddleware)
-
-app.include_router(webpages.router, tags=["webpages"])
-app.include_router(dev.router, tags=["dev", "error"])
+app.include_router(main_router)
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="window" style="width:90%; max-width:700px">
+    <div class="window-top-bar">bloglist.exe<span class="fake-close">❌</span></div>
+    <div class="window-content">
+        {% for blog in blogs %}
+            <a href="/blog/{{ blog }}" class="link-button">{{ blog }}</a><br>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

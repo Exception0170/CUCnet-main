@@ -5,8 +5,9 @@ from website.getservice import check_multiple_services
 import os
 import json
 
-router = APIRouter()
-templates = Jinja2Templates(directory="website/templates")
+from shared.account import TemplateResponseWithUser
+
+web_router = APIRouter()
 
 
 def load_news():
@@ -19,10 +20,10 @@ def load_news():
         return []
 
 
-@router.get("/", response_class=HTMLResponse)
+@web_router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     news_list = load_news()[:7]
-    return templates.TemplateResponse("index.html",{
+    return TemplateResponseWithUser("index.html", {
         "request": request,
         "title": "CUCnet",
         "news_list": news_list,
@@ -30,14 +31,14 @@ async def index(request: Request):
     })
 
 
-@router.get("/status", response_class=HTMLResponse)
+@web_router.get("/status", response_class=HTMLResponse)
 async def status(request: Request):
     services_status = check_multiple_services(
         [['ngircd', 'IRC'], ['wg-quick@wg0', 'Network']],
         [['python3 -m bot.main', '@Cucnet_bot']]
     )
     active_count = sum(1 for service in services_status if service['state'] == 'Active')
-    return templates.TemplateResponse("status.html", {
+    return TemplateResponseWithUser("status.html", {
         "request": request,
         "title": "status",
         "services": services_status,
@@ -47,48 +48,48 @@ async def status(request: Request):
     })
 
 
-@router.get("/about", response_class=HTMLResponse)
+@web_router.get("/about", response_class=HTMLResponse)
 async def about(request: Request):
-    return templates.TemplateResponse("about-win95.html", {"request": request, "title": "About CUCnet"})
+    return TemplateResponseWithUser("about-win95.html", {"request": request, "title": "About CUCnet"})
 
 
-@router.get("/contacts", response_class=HTMLResponse)
+@web_router.get("/contacts", response_class=HTMLResponse)
 async def contacts(request: Request):
-    return templates.TemplateResponse("contacts.html", {
+    return TemplateResponseWithUser("contacts.html", {
         "request": request,
         "title": "Contacts",
         "page_title": "contacts://"
     })
 
 
-@router.get("/docs", response_class=HTMLResponse)
+@web_router.get("/docs", response_class=HTMLResponse)
 async def guides(request: Request):
-    return templates.TemplateResponse("docs.html", {
+    return TemplateResponseWithUser("docs.html", {
         "request": request,
         "title": "Docs",
         "page_title": "docs://"
     })
 
 
-@router.get("/docs/irc", response_class=HTMLResponse)
+@web_router.get("/docs/irc", response_class=HTMLResponse)
 async def irc(request: Request):
-    return templates.TemplateResponse("docs/irc.html", {
+    return TemplateResponseWithUser("docs/irc.html", {
         "request": request,
         "title": "IRC Guide",
         "page_title": "docs://IRC"
     })
 
 
-@router.get("/docs/connect", response_class=HTMLResponse)
+@web_router.get("/docs/connect", response_class=HTMLResponse)
 async def connect(request: Request):
-    return templates.TemplateResponse("docs/connect.html", {
+    return TemplateResponseWithUser("docs/connect.html", {
         "request": request,
         "title": "Connect Guide",
         "page_title": "docs://connect"
     })
 
 
-@router.get("/legal/tos")
+@web_router.get("/legal/tos")
 async def tos_docx(request: Request):
     file_path = "website/static/legal/tos.docx"
     if not os.path.isfile(file_path):
@@ -100,9 +101,9 @@ async def tos_docx(request: Request):
     )
 
 
-@router.get("/rules")
+@web_router.get("/rules")
 async def rules(request: Request):
-    return templates.TemplateResponse("rules.html", {
+    return TemplateResponseWithUser("rules.html", {
         "request": request,
         "title": "Rules",
         "page_title": "sys://rules"

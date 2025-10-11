@@ -1,7 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 style="color:red">>  {{ error }}</h2>
-{{ message }}<br>
-<br>
+<br><br><br>
+<div style="text-align: center">
+    <span style="color:#1b336a; background-color:#e3e3e3; padding: 5px; text-shadow: 0 0 2px #e3e3e3;">CUCNET</span>
+    <h2 style="color:red">>  {{ error }} <</h2>
+    {{ message }}<br>
+    <br>
+</div>
+<br><br><br>
 <button style="font-family: TDAtext" class="link-button" onclick="history.back()">< Назад </button>
+<style>
+    html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #1b336a;
+  color: #e3e3e3;
+}
+
+.link-button {
+  display: inline-block;
+  background-color: #e3e3e3;
+  color: #1b336a;
+  text-decoration: none;
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 2px solid #e3e3e3;
+  border-color: #e3e3e3;
+  box-sizing: border-box;
+  margin: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.link-button:hover {
+  background-color: #1b336a;
+  color: #e3e3e3;
+}
+.link-button {
+  box-shadow: 0 0 5px #e3e3e3;
+  text-shadow: 0 0 2px #e3e3e3;
+}
+
+</style>
 {% endblock %}
