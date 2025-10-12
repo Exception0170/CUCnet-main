@@ -12,6 +12,7 @@ NEWS_CHANNEL_ID = os.getenv('NEWS_CHANNEL_ID')
 PROFILE_BOT_TOKEN = os.getenv('PROFILE_BOT_TOKEN')
 WIREGUARD_PUBLIC_KEY = os.getenv('WIREGUARD_PUBLIC_KEY')
 WIREGUARD_ENDPOINT = os.getenv('WIREGUARD_ENDPOINT')
+USE_HTTPS = os.getenv('USE_HTTPS')
 NEWS_JSON_FILE = "news.json"
 DNS_HOSTS = "/etc/hosts.cucnet"
 # Profile bot settings

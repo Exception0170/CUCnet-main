@@ -11,7 +11,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import os
 
 from website.routers import main_router
-from config import SESSION_SECRET, SESSION_TIME
+from config import SESSION_SECRET, SESSION_TIME, USE_HTTPS
 
 app = FastAPI(
     docs_url=None,
@@ -30,7 +30,7 @@ app.add_middleware(
     session_cookie="vpn_session",
     max_age=SESSION_TIME,
     same_site="lax",
-    https_only=False  # Set to True in production with HTTPS
+    https_only=USE_HTTPS # Set to True in production with HTTPS
 )
 
 

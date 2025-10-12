@@ -17,7 +17,7 @@ def get_pages():
     return sorted(pages)
 
 
-@blog_router.get("/")
+@blog_router.get("")
 async def list(request: Request):
     return TemplateResponseWithUser("bloglist.html", {
         "request": request,
