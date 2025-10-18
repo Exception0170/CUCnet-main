@@ -37,7 +37,6 @@ async def login_page(request: Request):
 @accounts_router.post("/login")
 async def login_submit(request: Request, username: str = Form(...), password: str = Form(...)):
     """Handle login form submission"""
-    print(db.get_user_by_username("exception17"))
     try:
         # If user is already logged in, redirect to dashboard
         if request.session.get("user_id"):
