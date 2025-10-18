@@ -4,7 +4,7 @@ import ipaddress
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
-from shared.models import Base, User, Profile
+from shared.models import Base, User, Profile, DNSRecord
 from shared.wireguard import WireGuardManager
 import secrets
 import string
@@ -191,6 +191,7 @@ class DatabaseManager:
             user = session.query(User).filter_by(telegram_id=telegram_id).first()
             if user:
                 user.set_password(password)
+                user.site_password = ""  # remove temp password
                 session.commit()
                 return True
             return False
@@ -306,7 +307,6 @@ class DatabaseManager:
                 existing_profile = session.query(Profile).filter_by(assigned_ip=test_ip).first()
                 if not existing_profile:
                     return test_ip
-
         return None
 
     def get_user_profiles(self, telegram_id):
@@ -438,3 +438,97 @@ class DatabaseManager:
         """Generate a random password"""
         characters = string.ascii_letters + string.digits
         return ''.join(secrets.choice(characters) for _ in range(length))
+
+    def add_dns_record(self, telegram_id, domain):
+        """Add a new DNS record for user"""
+        session = self.get_session()
+        try:
+            user = session.query(User).filter_by(telegram_id=telegram_id).first()
+            if not user:
+                return False
+
+            # Check if domain already exists
+            existing_record = session.query(DNSRecord).filter_by(domain=domain).first()
+            if existing_record:
+                return False
+
+            # Create DNS record
+            dns_record = DNSRecord(
+                user_id=user.id,
+                domain=domain,
+                status='pending'
+            )
+
+            session.add(dns_record)
+            session.commit()
+            logger.info(f"DNS record added: {domain} for user {telegram_id}")
+            return True
+        except IntegrityError:
+            session.rollback()
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error adding DNS record: {e}")
+            return False, f"Error: {str(e)}"
+        finally:
+            session.close()
+
+    def get_user_dns_records(self, telegram_id):
+        """Get all DNS records for a user"""
+        session = self.get_session()
+        try:
+            user = session.query(User).filter_by(telegram_id=telegram_id).first()
+            if not user:
+                return []
+
+            records = session.query(DNSRecord).filter_by(user_id=user.id).all()
+            return [{
+                'id': record.id,
+                'domain': record.domain,
+                'status': record.status,
+                'created_at': record.created_at
+            } for record in records]
+        except Exception as e:
+            logger.error(f"Error getting user DNS records: {e}")
+            return []
+        finally:
+            session.close()
+
+    def update_dns_status(self, record_id, status):
+        """Update DNS record status"""
+        session = self.get_session()
+        try:
+            if status not in ['active', 'pending']:
+                return False
+
+            record = session.query(DNSRecord).filter_by(id=record_id).first()
+            if record:
+                record.status = status
+                session.commit()
+                logger.info(f"DNS record {record_id} status updated to {status}")
+                return True
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error updating DNS status: {e}")
+            return False
+        finally:
+            session.close()
+
+    def delete_dns_record(self, record_id):
+        """Delete DNS record"""
+        session = self.get_session()
+        try:
+            record = session.query(DNSRecord).filter_by(id=record_id).first()
+            if record:
+                session.delete(record)
+                session.commit()
+                logger.info(f"DNS record {record_id} deleted")
+                return True
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error deleting DNS record: {e}")
+            return False
+        finally:
+            session.close()

@@ -82,22 +82,25 @@ body::before {
 }
 
 .link-button {
+  font-family: TDAtext;
   display: inline-block;
-  background-color: #ff9c25;
+  background-color: var(--button-bg, #ff9c25);
   color: #331900;
   text-decoration: none;
   padding: 5px 10px;
   font-size: 1em;
-  border: 2px solid #ff9c25;
+  border: 2px solid var(--button-bg, #ff9c25);
   box-sizing: border-box;
   margin: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
+  box-shadow: 0 0 5px var(--button-bg, #ff9c25);
+  text-shadow: 0 0 2px var(--button-bg, #ff9c25);
 }
 
 .link-button:hover {
   background-color: #331900;
-  color: #ff9c25;
+  color: var(--button-bg, #ff9c25);
 }
 
 .blue-button {
@@ -239,14 +242,14 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name{
   text-shadow: 0 0 2px currentColor;
 }
 
-.window, .note, .warning, .link-button, .blue-button, .list-entries li, .list-entries div {
+.window, .note, .warning, .blue-button, .list-entries li, .list-entries div {
   box-shadow: 0 0 5px currentColor;
 }
 .window {
   box-shadow: 0 0 5px currentColor;
 }
 
-.link-button, .window-top-bar {
+.window-top-bar {
   box-shadow: 0 0 5px #ff9c25;
   text-shadow: 0 0 2px #ff9c25;
 }
@@ -270,20 +273,123 @@ body, a, h1, h2, h3, h4, h5, h6, .contact-name{
   text-shadow: 0 0 3px yellow;
 }
 .account-topbar {
-  font-size:clamp(0.75rem, 4vw, 1.5rem);
+  position: sticky;
+  top: 0;
+  font-size: clamp(0.75rem, 4vw, 1.5rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 60px;
+  z-index: 5;
+  backdrop-filter: blur(5px);
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 90%,
+    transparent 100%
+  );
 }
+
 .account-topbar .home-button {
-  margin-right: 15px;
+  flex-shrink: 1;
+  min-width: min-content;
+  white-space: nowrap;
+  margin-right: 0;
 }
 
 .account-topbar .page-title {
   font-weight: bold;
   margin: 0;
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
+  text-align: left; /* Changed from center to left */
+  font-size: 3rem; /* Regular h1 size */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 15px;
+}
+
+.account-topbar .account-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* More space for controls */
+  flex-shrink: 1;
+  min-width: min-content;
+  white-space: nowrap;
+}
+
+.account-topbar .account-controls .link-button {
+  margin: 0;
+  padding: 5px 10px;
+  font-size: 1em;
+  flex-shrink: 1;
+  min-width: min-content;
+}
+
+.account-topbar .account-username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* More space for nickname */
+  flex-shrink: 0;
+  font-size: 1.1em;
+  margin-right: 10px;
+}
+
+/* Make link-buttons fit properly */
+.account-topbar .link-button {
+  margin: 0;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .account-topbar {
+    padding: 0 10px;
+    gap: 10px;
+    height: 55px;
+  }
+
+  .account-topbar .page-title {
+    font-size: 2rem; /* Still good h1 size on tablet */
+    padding: 0 10px;
+  }
+
+  .account-topbar .account-controls {
+    gap: 8px;
+  }
+
+  .account-topbar .account-username {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .account-topbar .page-title {
+    font-size: 2rem; /* Slightly smaller but still prominent */
+  }
+
+  .account-topbar .account-username {
+    display: none;
+  }
+
+  .account-topbar .link-button {
+    padding: 4px 8px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-topbar .account-username {
+    display: none;
+  }
+
+  .account-topbar .page-title {
+    font-size: 1.1rem;
+    padding: 0 5px;
+  }
 }
 
 /* Form Input Styles for CRT Theme */

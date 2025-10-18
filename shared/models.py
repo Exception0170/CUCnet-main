@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -32,6 +32,7 @@ class User(Base):
 
     # Relationships
     profiles = relationship("Profile", back_populates="user", cascade="all, delete-orphan")
+    dns_records = relationship("DNSRecord", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -85,3 +86,22 @@ class Profile(Base):
 
     def __repr__(self):
         return f'<Profile {self.profile_name} ({self.profile_type}) - {self.assigned_ip}>'
+
+
+class DNSRecord(Base):
+    __tablename__ = 'dns_records'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    domain = Column(String(255), nullable=False)
+    status = Column(Enum('active', 'pending', name='dns_status'), default='pending')
+
+    # Timestamps
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+    # Relationships
+    user = relationship("User", back_populates="dns_records")
+
+    def __repr__(self):
+        return f'<DNSRecord {self.domain} ({self.status})>'

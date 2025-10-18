@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, FileResponse
-from website.getservice import check_multiple_services
+from shared.account import TemplateResponseWithUser
 
 dev_router = APIRouter(prefix="/dev", tags=["dev", "error"])
 templates = Jinja2Templates(directory="website/templates")
@@ -9,10 +8,19 @@ templates = Jinja2Templates(directory="website/templates")
 
 @dev_router.get("/example")
 async def example(request: Request):
-    return templates.TemplateResponse("example.html",{
+    return TemplateResponseWithUser("example.html", {
         "request": request,
         "title": "Example",
         "page_title": "sys://Example"
+    })
+
+
+@dev_router.get("/long")
+async def example(request: Request):
+    return TemplateResponseWithUser("example.html", {
+        "request": request,
+        "title": "Example",
+        "page_title": "sys://Example long title, lorem ipsum;"
     })
 
 

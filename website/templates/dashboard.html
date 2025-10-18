@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- Left Column -->
+    <div class="left-column">
+
+        <!-- User Profile Window -->
+        <div class="window">
+            <div class="window-top-bar">user.exe<span class="fake-close">❌</span></div>
+            <div class="window-content">
+                {% if user %}
+                user://<span style="color:#00cafe">{{ user.username or "USER" }}</span><br>
+                Status:
+                {% if user.ignored %}
+                    <span style="color:red">Banned</span>
+                {% elif user.is_verified %}
+                    <span style="color:lime">Verified</span>
+                {% endif %}
+                <br>
+                Profiles: {{ profiles|length if profiles else 0 }}/3<br>
+                DNS: <span style="color:yellow">None</span><br>
+                PROXY: <span style="color:yellow">None</span><br>
+                {% else %}
+                <div class="warning">NO USER DATA</div>
+                <a href="/account/login" class="link-button">LOGIN</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- DNS Window -->
+        <div class="window" style="border-color:gray; box-shadow: 0 0 5px gray;">
+            <div class="window-top-bar" style="background-color:gray; text-shadow:none; box-shadow: 0 0 2px gray;">config/DNS.exe<span class="fake-close">❌</span></div>
+            <div class="window-content" style="filter: grayscale(100%) brightness(0.6); pointer-events: none; user-select: none;">
+                <div class="warning">⚠ DNS еще не работают!</div>
+                <div>Текущий адрес: <span style="color:yellow">N/A</span></div>
+                <div class="list-entries">
+                    <form method="POST" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" name="domain" placeholder="example.com" style="flex: 1; margin: 0;">
+                        <button type="submit" class="link-button" style="margin: 0; flex-shrink: 0;">SET</button>
+                    </form>
+                </div>
+                <a href="/docs/dns" class="link-button" style="--button-bg:lightblue">docs://DNS</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+
+        <!-- Profiles Window -->
+        <div class="window">
+            <div class="window-top-bar">user.exe/profiles<span class="fake-close">❌</span></div>
+            <div class="window-content">
+                Ваши Wireguard профили:
+                <div class="list-entries">
+                    {% if profiles %}
+                        {% for profile in profiles %}
+                        <div>
+                            <span style="color: green">{{ profile.profile_name or "Unnamed Profile" }}</span><br>
+                            TYPE: {{ profile.profile_type or "STANDARD" }}<br>
+                            IP: <span style="color: yellow">{{ profile.assigned_ip or "NO IP" }}</span><br>
+                            <button class="link-button" style="--button-bg:brown; filter: grayscale(100%) brightness(0.6); pointer-events: none; user-select: none;">Rename</button>
+                            <a href="/account/get-wireguard/?name={{ profile.profile_name }}" class="link-button" style="--button-bg:#00cc50">Download</a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="warning">NO PROFILES</div>
+                    {% endif %}
+                </div>
+                <a href="/docs/connect" class="link-button" style="--button-bg:lightblue">docs://подключение</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-column {
+    flex: 2;
+}
+
+.window {
+    margin: 0;
+}
+
+.animated-nickname {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.list-entries {
+    margin: 10px 0;
+    gap: 10px;
+}
+
+.list-entries div {
+    padding: 8px;
+    margin-bottom: 5px;
+}
+.list-entries input {
+  flex: 1;
+  margin: 0;
+}
+
+.list-entries button {
+  margin: 2px;
+  flex-shrink: 0;
+}
+
+input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+    }
+}
+</style>
+
+{% endblock %}
