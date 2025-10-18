@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="text-align:center"><h1 style="font-size: 55px" class="animated-nickname">-{ CU Community network }-</h1></div>
+<div style="text-align:center"><h1 style="font-size: 55px" class="animated-nickname typing-animation">-{ CU Community network }-</h1></div>
 {% include 'news.html' with context %}
 <div class="window" style="width: 90%">
 	<div class="window-top-bar">Main.exe<span class="fake-close">❌</span></div>
@@ -32,22 +32,4 @@
         По вопросам техподдержки обращаться к Кириллу Медведеву(<a href="https://t.me/exception17">@exception17</a>)
 	</div>
 </div>
-<style>
-.typing-animation {
-  overflow: hidden;
-  border-right: 2px solid currentColor;
-  white-space: nowrap;
-  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: currentColor }
-}
-</style>
 {% endblock %}
