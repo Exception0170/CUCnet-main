@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="warning">⚠ Автоматическая система выдачи DNS пока не работает - просите <a href="http://t.me/exception17">@exception17</a></div>
+<div class="window">
+    <div class="window-top-bar">notepad.exe: dns.txt<span class="fake-close">❌</span></div>
+    <div class="window-content">
+        <h2>Внутренние доменные имена сети CUCnet</h2>
+        Внутри сети есть возможность выдавать собственные доменные имена для упрощенной адресации.<br>
+        Пространство доменных имен: <span style="color:lightblue">.cucnet</span><br>
+        Пример: <span style="color:white">server.cucnet</span> (Главный сервер)<br>
+        Выдача доменных имен происходит на вебсайте, и проходит через модерацию.<br>
+        <h3>Правила доменных имен:</h3>
+        * Только английские имена<br>
+        * Нецензурная лексика запрещена<br>
+        * Идеально не делать имена слишком короткими(<3 символа) или длинными(>12 символов)<br>
+        <div class="note">ℹ Если при вводе адреса вас кидает в гугл, добавьте в ссылку http://</div>
+    </div>
+</div>
+<button class="link-button" onclick="history.back()">< Назад </button>
+{% endblock %}

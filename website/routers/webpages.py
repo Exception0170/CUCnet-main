@@ -89,6 +89,33 @@ async def connect(request: Request):
     })
 
 
+@web_router.get("/docs/dns", response_class=HTMLResponse)
+async def dns(request: Request):
+    return TemplateResponseWithUser("docs/dns.html", {
+        "request": request,
+        "title": "DNS Guide",
+        "page_title": "docs://dns"
+    })
+
+
+@web_router.get("/docs/proxy", response_class=HTMLResponse)
+async def proxy(request: Request):
+    return TemplateResponseWithUser("docs/proxy.html", {
+        "request": request,
+        "title": "Proxy Guide",
+        "page_title": "docs://proxy"
+    })
+
+
+@web_router.get("/docs/arch", response_class=HTMLResponse)
+async def proxy(request: Request):
+    return TemplateResponseWithUser("docs/arch.html", {
+        "request": request,
+        "title": "CUCnet architecture",
+        "page_title": "docs://architecture"
+    })
+
+
 @web_router.get("/legal/tos")
 async def tos_docx(request: Request):
     file_path = "website/static/legal/tos.docx"

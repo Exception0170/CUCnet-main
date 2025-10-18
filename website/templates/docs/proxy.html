@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="warning">⚠ Автоматическая система настройки proxy пока не работает - просите <a href="http://t.me/exception17">@exception17</a></div>
+<div class="window">
+    <div class="window-top-bar">notepad.exe: proxy.txt<span class="fake-close">❌</span></div>
+    <div class="window-content">
+        <h2>Система Web-Proxy сети CUCnet</h2>
+        Система прокси позволяет получить доступ к внутренним сайтам сети из внешнего интернета по протоколу HTTPS.<br>
+        Эндпоинт для доступа: <span style="color:lightblue">cucnet.ru/w/{имя сайта}.cucnet</span><br>
+        Пример: <a href="https://cucnet.ru/w/exceptionhome.cucnet/cucnet.html" style="color:white">https://cucnet.ru/w/exceptionhome.cucnet/cucnet.html</a> (Мой домашний комп)<br>
+        Траффик идет по HTTPS к главному серверу(cucnet.ru), а затем перенаправяется внутри сети по HTTP.<br>
+        <span style="color:white">web <--HTTPS--> cucnet.ru <--HTTP--> example.cucnet</span><br>
+        Если вы не хотите, чтобы к вашему сайту получали доступ по HTTP, просто запретите к нему доступ для всех, кроме шлюза(<span style="color:yellow">10.8.0.1</span>)<br>
+        <div class="note">ℹ По проблемам с прокси, обращайтесь к администратору.</div>
+    </div>
+</div>
+<button class="link-button" onclick="history.back()">< Назад </button>
+{% endblock %}

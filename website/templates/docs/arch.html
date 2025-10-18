@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="window">
+    <div class="window-top-bar">notepad.exe: arch.txt<span class="fake-close">❌</span></div>
+    <div class="window-content">
+        <h2>Распределение IPv4 Адресов внутри сети</h2>
+        Айпи-адреса выдаются автоматически через телеграм бота, и являются статичными и уникальными.<br>
+        <div class="warning">⚠ Не выдавайте себе профиль, если им не собираетесь пользоваться - не засоряйте сеть!</div>
+        Главный(Центральный) сервер: <span style="color:gold">10.8.0.1</span> - на нем хостится вебсайт cucnet.ru, wireguard сервер и телеграм бот.
+        <h3>Подсети</h3>
+        <span style="color:gold">10.8.10.x - 10.8.25.x</span> -- Подсеть для вебсайтов, здесь размещайте свои сервисы.<br>
+        <span style="color:gold">10.8.100.x - 10.8.255.x</span> -- Подсеть для персональных устройств
+    </div>
+</div>
+<button class="link-button" onclick="history.back()">< Назад </button>
+{% endblock %}
